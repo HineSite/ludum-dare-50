@@ -8,8 +8,9 @@ import { Platform } from './platform.js';
         let audio = {
             'themeAudio': document.querySelector('#themeAudio')
         };
+        audio.themeAudio.volume = .25;
 
-        let debugLogs = false;
+        let debugLogs = true;
         let gameLoop = new GameLoop(onRun, onStart, onStop, onPause, onResume, 60);
         let viewport = $(window);
         let platformsContainer = $('#platforms');
@@ -82,19 +83,12 @@ import { Platform } from './platform.js';
         }
 
         function onRun (delayMilli, delaySeconds) {
-            if (!document.hasFocus()) {
-                if (documentHasFocus) {
-                    pause();
-                }
-
-                documentHasFocus = false;
-                return;
-            }
 
             skyler.update(delaySeconds, Platform.Platforms);
         }
 
         function onStart () {
+            playTheme();
             log(GameLoop.LogType.INFO, 'Loop State', 'Started');
         }
 
@@ -109,10 +103,12 @@ import { Platform } from './platform.js';
             if (gameLoop.loopState !== GameLoop.LoopState.PAUSED)
                 return;
 
+            pauseTheme();
             log(GameLoop.LogType.INFO, 'Loop State', 'Paused');
         }
 
         function onResume () {
+            playTheme();
             log(GameLoop.LogType.INFO, 'Loop State', 'Resumed');
         }
 
@@ -127,10 +123,21 @@ import { Platform } from './platform.js';
             console.log(type.description + ' - ' + message);
         }
 
+        function playTheme() {
+            if (!$('#muteTheme').hasClass('audio-off')) {
+                audio.themeAudio.play();
+            }
+        }
+
+        function pauseTheme() {
+            if (!$('#muteTheme').hasClass('audio-off')) {
+                audio.themeAudio.pause();
+            }
+        }
+
         function loadAudio() {
             $('#soundEffects audio').each(function (i, e) {
-                //$(e).attr('muted', 'muted');
-                e.muted = true; // Mute by default
+                //e.muted = true; // Mute by default
 
                 let id = $(e).attr('id');
 
