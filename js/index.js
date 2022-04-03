@@ -5,6 +5,10 @@ import { Platform } from './platform.js';
 
 (function ($) {
     $(function() {
+        let audio = {
+            'themeAudio': document.querySelector('#themeAudio')
+        };
+
         let debugLogs = false;
         let gameLoop = new GameLoop(onRun, onStart, onStop, onPause, onResume, 60);
         let viewport = $(window);
@@ -14,7 +18,7 @@ import { Platform } from './platform.js';
 
         let gravity = 400; // pixels/second
 
-        let skyler = new Player($('#skyler'), 0, 0, 300, gravity);
+        let skyler = new Player($('#skyler'), 0, 0, 300, gravity, audio);
 
         gameLoop.logger = (type, message) => {
             logType(type, message);
@@ -22,6 +26,7 @@ import { Platform } from './platform.js';
 
         gameLoop.initialize(() => {
             loadPlatforms();
+            loadAudio();
             $('#skyler').show();
 
             $(window).on('keydown', function (event) {
@@ -121,5 +126,54 @@ import { Platform } from './platform.js';
 
             console.log(type.description + ' - ' + message);
         }
+
+        function loadAudio() {
+            $('#soundEffects audio').each(function (i, e) {
+                //$(e).attr('muted', 'muted');
+                e.muted = true; // Mute by default
+
+                let id = $(e).attr('id');
+
+                audio[id] = e;
+            });
+        }
+
+        $('#muteTheme').on('mousedown', (event) => {
+            let control = $(event.currentTarget);
+            let target = audio[control.data('target')];
+
+            if (control.hasClass('audio-off')) {
+                target.volume = .25;
+                target.play();
+                control.removeClass('audio-off');
+            }
+            else {
+                target.pause();
+                target.currentTime = 0;
+
+                control.addClass('audio-off');
+            }
+        });
+
+        $('#muteAudio').on('mousedown', (event) => {
+            let control = $(event.currentTarget);
+
+            if (control.hasClass('audio-off')) {
+                control.removeClass('audio-off');
+
+                // Enable audio
+                $('#soundEffects audio').each(function (i, e) {
+                    e.muted = false;
+                });
+            }
+            else {
+                control.addClass('audio-off');
+
+                // Disable audio
+                $('#soundEffects audio').each(function (i, e) {
+                    e.muted = true;
+                });
+            }
+        });
     });
 })(jQuery);

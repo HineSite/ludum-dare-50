@@ -32,6 +32,13 @@
             border-right-width: 1px;
         }
 
+        @media screen and (max-width: 1450px) {
+            #board {
+                margin-left: unset;
+                margin-right: unset;
+            }
+        }
+
         #skyler {
             display: none;
             position: absolute;
@@ -75,6 +82,40 @@
         #platforms .platform.right-open {
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
+        }
+
+        .audio-controls {
+            background-color: rgba(71, 71, 95, 0.96);
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .audio-controls .audio-off {
+            background-color: #335;
+        }
+
+        .audio-controls .audio-heading,
+        .audio-controls .audio-control {
+            padding: 10px;
+        }
+
+        .audio-controls .audio-control {
+            cursor: pointer;
+        }
+
+        .audio-controls .audio-control:hover {
+            background-color: rgba(91, 91, 115, 1);
+        }
+
+        .audio-controls img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -273,6 +314,33 @@
         </svg>
 
         <div class="abyss"></div>
+    </div>
+
+
+    <div class="audio-controls">
+        <div class="audio-heading">
+            <div class="audio-text">Audio</div>
+        </div>
+
+        <div id="muteTheme" class="audio-control audio-off" data-target="themeAudio">
+            <img src="./images/mute-theme.png" title="Toggle Background Audio">
+            <div class="audio-text">Background</div>
+        </div>
+
+        <div id="muteAudio" class="audio-control audio-off">
+            <img src="./images/mute-audio.png" title="Mute Sound Effects">
+            <div class="audio-text">Effects</div>
+        </div>
+    </div>
+
+    <audio id="themeAudio">
+        <source src="./audio/theme.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="soundEffects">
+        <audio id="jumpFx">
+            <source src="./audio/jump.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
     <script type="application/javascript" src="./js/jquery.js"></script>

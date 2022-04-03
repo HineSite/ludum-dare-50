@@ -1,5 +1,4 @@
 import {Vector2} from "./vector2";
-import {Platform} from "./platform";
 
 export class Player {
     #player = $();
@@ -12,11 +11,13 @@ export class Player {
     #gravity = 0;
     #jumps = 0;
     #playWidth = 0;
+    #audio = null;
 
-    constructor(player, startX, startY, speed, gravity) {
+    constructor(player, startX, startY, speed, gravity, audio) {
         this.#player = $(player);
         this.#speed = speed;
         this.#gravity = gravity;
+        this.#audio = audio;
         this.#playWidth = this.#player.width();
 
         this.#updatePos(startX, startY);
@@ -83,6 +84,8 @@ export class Player {
 
     jump() {
         if (this.#jumps < 2) {
+            this.#audio['jumpFx'].play();
+
             this.#clampCurrentYSpeed(this.#currentYSpeed += this.#gravity);
             this.#movement.Y = 1;
             this.#jumps++;
