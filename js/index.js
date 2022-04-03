@@ -1,24 +1,29 @@
 import { GameLoop } from './GameLoop.js';
 import { Player } from './player.js';
 import { Vector2 } from './vector2.js';
+import { Platform } from './platform.js';
 
 (function ($) {
     $(function() {
         let debugLogs = false;
         let gameLoop = new GameLoop(onRun, onStart, onStop, onPause, onResume, 60);
         let viewport = $(window);
+        let platformsContainer = $('#platforms');
         let documentHasFocus = true;
         let userPaused = false;
 
-        let gravity = 200; // pixels/second
+        let gravity = 400; // pixels/second
 
-        let skyler = new Player($('#skyler'), 550, 0, gravity, gravity);
+        let skyler = new Player($('#skyler'), 0, 0, 300, gravity);
 
         gameLoop.logger = (type, message) => {
             logType(type, message);
         };
 
         gameLoop.initialize(() => {
+            loadPlatforms();
+            $('#skyler').show();
+
             $(window).on('keydown', function (event) {
                 if (event.keyCode === 32 || event.keyCode === 87 || event.keyCode === 38 || // space | 'w' | up arrow
                     event.keyCode === 37 || event.keyCode === 65 || // left arrow | 'a'
@@ -56,6 +61,12 @@ import { Vector2 } from './vector2.js';
             });
         });
 
+        function loadPlatforms() {
+            for (let i = 0; i < Platform.Platforms.length; i++) {
+                platformsContainer.append($(Platform.Platforms[i].getHtml()));
+            }
+        }
+
         function pause() {
             gameLoop.pause(() => {
                 if (!userPaused && document.hasFocus()) {
@@ -75,7 +86,7 @@ import { Vector2 } from './vector2.js';
                 return;
             }
 
-            skyler.update(delaySeconds);
+            skyler.update(delaySeconds, Platform.Platforms);
         }
 
         function onStart () {
