@@ -2,20 +2,22 @@ import {Vector2} from "./vector2";
 
 export class Player {
     #player = $();
-    #speed = 0;
+    #speed = 0; // The speed moved on the x-axis
+    #decelSpeed = 0; // Deceleration speed on ground (think friction)
     #currentYSpeed = 0;
     #currentXSpeed = 0;
     #position = new Vector2(0, 0);
     #movement = new Vector2(0, 1);
     #stopMoving = false;
-    #gravity = 0;
+    #gravity = 0; // Speed of gravity
     #jumps = 0;
     #playWidth = 0;
     #audio = null;
 
-    constructor(player, startX, startY, speed, gravity, audio) {
+    constructor(player, startX, startY, speed, decelSpeed, gravity, audio) {
         this.#player = $(player);
         this.#speed = speed;
+        this.#decelSpeed = decelSpeed;
         this.#gravity = gravity;
         this.#audio = audio;
         this.#playWidth = this.#player.width();
@@ -71,15 +73,16 @@ export class Player {
             newPos.X = Math.min(newPos.X, 1200 - this.#playWidth); // It's a magic number, just roll with it.
         }
 
-        this.#updatePos(newPos.X, newPos.Y);
-
         // Apply gravity
         this.#clampCurrentYSpeed(this.#currentYSpeed - (this.#gravity * delaySeconds));
 
         // Apply momentum
-        if (this.#stopMoving === true) {
-            this.#clampCurrentXSpeed(this.#currentXSpeed - (this.#speed * delaySeconds));
+        // SopMoving is true if the user is no longer holding an x-axis movement button
+        if (this.#stopMoving === true && newPos.Y === this.#position.Y) {
+            this.#clampCurrentXSpeed(this.#currentXSpeed - (this.#decelSpeed * delaySeconds));
         }
+
+        this.#updatePos(newPos.X, newPos.Y);
     }
 
     jump() {

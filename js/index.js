@@ -18,7 +18,7 @@ import { Platform } from './platform.js';
 
         let gravity = 400; // pixels/second
 
-        let skyler = new Player($('#skyler'), 0, 0, 300, gravity, audio);
+        let skyler = new Player($('#skyler'), 0, 0, 300, 600, gravity, audio);
 
         gameLoop.logger = (type, message) => {
             logType(type, message);
