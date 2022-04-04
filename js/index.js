@@ -117,7 +117,7 @@ import { Platform } from './platform.js';
                 skyler.decelSpeed = 300;
             }
 
-            Platform.PlatformTop += (3 * delaySeconds);
+            Platform.PlatformTop += (20 * delaySeconds);
             platformsContainer.css('top', Platform.PlatformTop + 'px');
         }
 

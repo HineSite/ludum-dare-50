@@ -50,6 +50,11 @@ export class Player {
         let moveVecNorm = Vector2.normalize(this.#movement);
         let deltaVec = new Vector2(moveVecNorm.X * delaySeconds * this.#currentXSpeed, moveVecNorm.Y * delaySeconds * this.#currentYSpeed);
         let newPos = Vector2.add(this.#position, deltaVec);
+        //console.log(this.#position.Y + ' - ' + newPos.Y);
+
+        let movingOnY = (Math.abs(newPos.Y - this.#position.Y) > 3);
+        //let movingDownOnY = (movingOnY && ((newPos.Y +3) - this.#position.Y) > 0);
+        //console.log(movingDownOnY);
 
         newPos.Y = Math.max(newPos.Y, 0);
         if (newPos.Y === this.#position.Y) {
@@ -88,7 +93,7 @@ export class Player {
 
         // Apply momentum
         // SopMoving is true if the user is no longer holding an x-axis movement button
-        if (this.#stopMoving === true && newPos.Y === this.#position.Y) {
+        if (this.#stopMoving === true) {
             this.#clampCurrentXSpeed(this.#currentXSpeed - (this.#decelSpeed * delaySeconds));
         }
 
