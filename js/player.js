@@ -11,8 +11,9 @@ export class Player {
     #stopMoving = false;
     #gravity = 0; // Speed of gravity
     #jumps = 0;
-    #playWidth = 0;
+    #playerWidth = 0;
     #audio = null;
+    #health = 100;
 
     constructor(player, startX, startY, speed, decelSpeed, gravity, audio) {
         this.#player = $(player);
@@ -20,7 +21,7 @@ export class Player {
         this.#decelSpeed = decelSpeed;
         this.#gravity = gravity;
         this.#audio = audio;
-        this.#playWidth = this.#player.width();
+        this.#playerWidth = this.#player.width();
 
         this.#updatePos(startX, startY);
     }
@@ -41,6 +42,10 @@ export class Player {
         });
     }
 
+    #takeDamage(damage) {
+        this.#health -= damage;
+    }
+
     update(delaySeconds, platforms) {
         let moveVecNorm = Vector2.normalize(this.#movement);
         let deltaVec = new Vector2(moveVecNorm.X * delaySeconds * this.#currentXSpeed, moveVecNorm.Y * delaySeconds * this.#currentYSpeed);
@@ -54,14 +59,19 @@ export class Player {
             // If moving down on Y, check every platform to see if we are standing on it.
             // ToDo: Optimise.
 
-            let footX = newPos.X;
+            let footX = newPos.X + (this.#playerWidth * .5);
             let footY = newPos.Y;
             for (let i = 0; i < platforms.length; i++) {
                 if (platforms[i].restingOnPlatform(footX, footY)) {
+                    //console.log('on platform: ' + i + ' with damage of: ' + platforms[i].getDamage());
                     newPos.Y = platforms[i].getTop(); // Pixel perfect!
+                    this.#takeDamage(platforms[i].getDamage());
                     this.#stopMovingY();
 
                     break;
+                }
+                else {
+                    //console.log('not on platform: ' + i);
                 }
             }
         }
@@ -70,7 +80,7 @@ export class Player {
             newPos.X = Math.max(newPos.X, 0); // Must not leave board.
         }
         else if (newPos.X > this.#position.X) {
-            newPos.X = Math.min(newPos.X, 1200 - this.#playWidth); // It's a magic number, just roll with it.
+            newPos.X = Math.min(newPos.X, 1200 - this.#playerWidth); // It's a magic number, just roll with it.
         }
 
         // Apply gravity
@@ -116,5 +126,17 @@ export class Player {
         this.#stopMoving = false;
         this.#clampCurrentXSpeed(this.#currentXSpeed += this.#speed);
         this.#movement.X = 1;
+    }
+
+    get health () {
+        return this.#health
+    }
+
+    set speed (speed) {
+        this.#speed = speed;
+    }
+
+    set decelSpeed (decelSpeed) {
+        this.#decelSpeed = decelSpeed;
     }
 }

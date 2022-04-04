@@ -9,8 +9,11 @@ export class Platform {
     #W = 0;
     #H = 20;
     #FromLeft = true;
+    #Damage = 0;
+    #ActiveDamage = 0;
+    #OnPlatform = false;
 
-    constructor(classes, styles, x, y, w, h, fromLeft) {
+    constructor(classes, styles, x, y, w, h, fromLeft, damge) {
         this.#Classes = classes;
         this.#Styles = styles;
         this.#X = x;
@@ -18,6 +21,7 @@ export class Platform {
         this.#W = w;
         this.#H = h;
         this.#FromLeft = fromLeft;
+        this.#Damage = !damge ? 0 : damge;
     }
 
     restingOnPlatform(x, y) {
@@ -27,12 +31,30 @@ export class Platform {
 
             let left = this.#FromLeft ? (this.#X) : (Platform.BoardWidth - this.#X - this.#W);
             let right = this.#FromLeft ? (this.#X + this.#W) : (Platform.BoardWidth - this.#X);
+            //console.log('left: ' + left + ' | right: ' + right + ' | x: ' + x + ' | y: ' + y)
             if (x >= left && x <= right) {
+                if (!this.#OnPlatform) {
+                    // Only activate damage if they were not on the platform, but are now.
+                    this.#ActiveDamage = this.#Damage;
+                }
+
+                this.#OnPlatform = true;
                 return true;
             }
         }
 
+        this.#OnPlatform = false;
         return false;
+    }
+
+    getDamage() {
+        // This prevents continuous damage caused by standing on the platform for more than ~17ms...
+        if (this.#ActiveDamage !== 0) {
+            this.#ActiveDamage = 0;
+            return this.#Damage;
+        }
+
+        return 0;
     }
 
     getTop() {

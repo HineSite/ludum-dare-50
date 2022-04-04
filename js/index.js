@@ -10,12 +10,13 @@ import { Platform } from './platform.js';
         };
         audio.themeAudio.volume = .25;
 
-        let debugLogs = true;
+        let debugLogs = false;
         let gameLoop = new GameLoop(onRun, onStart, onStop, onPause, onResume, 60);
         let viewport = $(window);
         let platformsContainer = $('#platforms');
         let documentHasFocus = true;
         let userPaused = false;
+        let health = $('#health');
 
         let gravity = 400; // pixels/second
 
@@ -85,6 +86,30 @@ import { Platform } from './platform.js';
         function onRun (delayMilli, delaySeconds) {
 
             skyler.update(delaySeconds, Platform.Platforms);
+
+            health.css('width', skyler.health + '%');
+            if (skyler.health <= 0) {
+                gameLoop.stop();
+                $('#died').show();
+                gameOver();
+            }
+
+            if (skyler.health <= 75) {
+                $('#arm-left-bot').hide();
+                $('#arm-left-top').css('fill', '#3e0000');
+            }
+
+            if (skyler.health <= 50) {
+                $('#arm-right-bot').hide();
+                $('#arm-right-top').hide();
+            }
+
+            if (skyler.health <= 25) {
+                $('#leg-left-bot').hide();
+                $('#leg-left-top').css('fill', '#3e0000');
+                skyler.speed = 150;
+                skyler.decelSpeed = 300;
+            }
         }
 
         function onStart () {
@@ -182,5 +207,10 @@ import { Platform } from './platform.js';
                 });
             }
         });
+
+        function gameOver() {
+            $('#gameOverScreen').removeClass('d-none');
+
+        }
     });
 })(jQuery);

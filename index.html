@@ -32,6 +32,21 @@
             border-right-width: 1px;
         }
 
+        #board .healthBar {
+            position: absolute;
+            width: 200px;
+            height: 25px;
+            top: 10px;
+            right: 10px;
+            border: solid #000 1px;
+        }
+
+        #board #health {
+            width: 100%;
+            height: 100%;
+            background-color: #7c0c0c;
+        }
+
         @media screen and (max-width: 1450px) {
             #board {
                 margin-left: unset;
@@ -71,7 +86,13 @@
         #platforms .platform {
             position: absolute;
             height: 20px;
-            background: black url("./images/platform-back2.jpg") repeat;
+            background: url("./images/platform-back2.jpg") repeat;
+        }
+
+        #platforms .platform.spiked {
+            position: absolute;
+            height: 20px;
+            background: url("./images/spikes.png") repeat;
         }
 
         #platforms .platform.left-open {
@@ -117,13 +138,52 @@
             height: 32px;
             margin-bottom: 5px;
         }
+
+        #gameOverScreen {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        #gameOverScreen .modal {
+            position: relative;
+            z-index: 800;
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #fff;
+            text-align: center;
+            padding: 20px 40px;
+            background-color: #7c0c0c;
+            font-size: 20px;
+            line-height: 30px;
+            font-weight: 600;
+        }
+
+        #gameOverScreen .title {
+            font-size: 42px;
+            line-height: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        #died, #abyss {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div id="board">
-        <div id="platforms">
-
-        </div>
+        <div class="healthBar"><div id="health"></div></div>
+        <div id="platforms"></div>
 
         <svg
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -341,6 +401,15 @@
         <audio id="jumpFx">
             <source src="./audio/jump.mp3" type="audio/mpeg">
         </audio>
+    </div>
+
+    <div id="gameOverScreen" class="d-none">
+        <div class="modal">
+            <div class="title">Game Over</div>
+            <div id="died">You delayed it as long as you could, but your own blunderous actions got you in the end!</div>
+            <div id="abyss">The abyss was inevitable. You knew that going in.</div>
+            <div style="margin-top: 5px;">Thanks for playing!</div>
+        </div>
     </div>
 
     <script type="application/javascript" src="./js/jquery.js"></script>
