@@ -1,6 +1,7 @@
 export class Platform {
     static Platforms = [];
     static BoardWidth = 1200; // You saw nothing!
+    static PlatformTop = 0;
 
     #Classes = '';
     #Styles = '';
@@ -25,7 +26,7 @@ export class Platform {
     }
 
     restingOnPlatform(x, y) {
-        let top = (this.#Y + this.#H);
+        let top = (this.#Y + this.#H) - Platform.PlatformTop;
         if (y >= (top - 5) && y <= (top +5)) {
             // If y is within 2 pixels of the top.
 
@@ -58,7 +59,7 @@ export class Platform {
     }
 
     getTop() {
-        return (this.#Y + this.#H);
+        return (this.#Y + this.#H) - Platform.PlatformTop;
     }
 
     getHtml() {

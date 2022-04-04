@@ -20,7 +20,7 @@ import { Platform } from './platform.js';
 
         let gravity = 400; // pixels/second
 
-        let skyler = new Player($('#skyler'), 0, 0, 300, 600, gravity, audio);
+        let skyler = new Player($('#skyler'), 1075, 137, 300, 600, gravity, audio);
 
         gameLoop.logger = (type, message) => {
             logType(type, message);
@@ -87,6 +87,12 @@ import { Platform } from './platform.js';
 
             skyler.update(delaySeconds, Platform.Platforms);
 
+            if (skyler.position.Y < 60) {
+                gameLoop.stop();
+                $('#abyss').show();
+                gameOver();
+            }
+
             health.css('width', skyler.health + '%');
             if (skyler.health <= 0) {
                 gameLoop.stop();
@@ -110,6 +116,9 @@ import { Platform } from './platform.js';
                 skyler.speed = 150;
                 skyler.decelSpeed = 300;
             }
+
+            Platform.PlatformTop += (3 * delaySeconds);
+            platformsContainer.css('top', Platform.PlatformTop + 'px');
         }
 
         function onStart () {

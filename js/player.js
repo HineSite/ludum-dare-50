@@ -128,6 +128,10 @@ export class Player {
         this.#movement.X = 1;
     }
 
+    get position () {
+        return this.#position;
+    }
+
     get health () {
         return this.#health
     }
