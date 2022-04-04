@@ -1,5 +1,7 @@
 # Ludum Dare 50 - Delay the inevitable (The Inevitable Abyss)
 
+![Cover](https://github.com/HineSite/ludum-dare-50/blob/4e494c18bf633f2b3d1de8cbd670d2facf14618f/images/cover.jpg)
+
 The Inevitable Abyss is... inevitable. Survival is the name of the game.
 
 Just your boring basic platformer. Well, almost anyways (almost a platformer that is). I didn't finish editing the level, so it ends real quick.
@@ -10,4 +12,4 @@ I spent so much time on player movement, getting it just the way I wanted. Then 
 
 Sound was done in LMMS.\
 Graphics were done in Inkscape and GIMP.\
-The project is HTML and JavaScript.\
+The project is HTML and JavaScript.
